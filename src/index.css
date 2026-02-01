@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-cyber-bg text-white min-h-screen overflow-x-hidden;
+  background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0b0b0f 90%);
+}
+
+.bg-scanline {
+  background-size: 100% 3px, 6px 100%;
+  background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+}
+
+.glass-card {
+  background: rgba(19, 19, 31, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+.text-glow-pink {
+  text-shadow: 0 0 8px #ff007f;
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 8px #7f00ff;
+}
+
+.text-glow-yellow {
+  text-shadow: 0 0 8px #ffd700;
+}
+
+.text-glow-green {
+  text-shadow: 0 0 8px #39ff14;
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 8px #00f3ff;
+}
+
+.text-glow-red {
+  text-shadow: 0 0 8px #ff3131;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(224, 38, 255, 0.3);
+  border-radius: 10px;
+}
+
+.writing-vertical-lr {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+.animate-scale-up {
+  animation: scaleUp 0.2s ease-out forwards;
+}
+
+/* Condições */
+.condition-pink { @apply text-cyber-pink shadow-[0_0_10px_rgba(255,0,153,0.3)]; }
+.condition-purple { @apply text-cyber-purple shadow-[0_0_10px_rgba(189,0,255,0.3)]; }
+.condition-green { @apply text-cyber-green shadow-[0_0_10px_rgba(57,255,20,0.3)]; }
+
+.level-badge {
+    @apply w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-all border border-white/20 bg-white/5;
+}
+
+.level-badge-active-purple { @apply border-cyber-purple/60 bg-cyber-purple/10 text-cyber-purple shadow-[0_0_15px_rgba(189,0,255,0.4)]; }
+.level-badge-active-pink { @apply border-cyber-pink/60 bg-cyber-pink/10 text-cyber-pink shadow-[0_0_15px_rgba(255,0,153,0.4)]; }
+.level-badge-active-green { @apply border-cyber-green/60 bg-cyber-green/10 text-cyber-green shadow-[0_0_15px_rgba(57,255,20,0.4)]; }
