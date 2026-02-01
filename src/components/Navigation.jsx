@@ -29,7 +29,6 @@ const Navigation = ({ activeTab, onTabChange }) => {
         { id: 'attributes', label: 'ATRIBUTOS & PERÍCIAS' },
         { id: 'combat', label: 'COMBATE & DEFESA' },
         { id: 'skills', label: 'HABILIDADES & TALENTOS' },
-        { id: 'inventory', label: 'INVENTÁRIO & NOTAS' },
     ];
 
     return (

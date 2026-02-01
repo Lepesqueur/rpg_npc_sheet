@@ -171,19 +171,7 @@ export const CharacterProvider = ({ children }) => {
                     icon: "fa-head-side-virus",
                     color: "neon-yellow"
                 }
-            ],
-            inventory: [
-                { id: 'i1', name: "Poção de Cura", icon: "fa-flask", color: "text-rpg-pink", qty: 3, currentUses: 1, maxUses: 1, type: "Consumível", price: "5 po", weight: 0.5 },
-                { id: 'i2', name: "Pergaminho de Mísseis", icon: "fa-scroll", color: "text-rpg-gold", qty: 2, currentUses: 3, maxUses: 3, type: "Consumível", price: "15 po", weight: 0.1 },
-                { id: 'i3', name: "Corda de Cânhamo", icon: "fa-dharmachakra", color: "text-rpg-gold", qty: 1, currentUses: 0, maxUses: 0, type: "Item", price: "2 po", weight: 2.0 },
-                { id: 'i4', name: "Adaga", icon: "fa-khanda", color: "text-gray-300", qty: 1, currentUses: 0, maxUses: 0, type: "Arma", price: "10 po", weight: 1.0 }
-            ],
-            peculiarities: [
-                { id: 'p1', name: "Sentidos Aguçados", val: "+2", description: "Seus sentidos são extremamente treinados." },
-                { id: 'p2', name: "Fobia de Escuro", val: "-3", description: "O personagem entra em pânico em escuridão total." }
-            ],
-            biography: "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
-            currency: { po: 1250, pp: 45, pc: 0 }
+            ]
         };
 
         // Populate initial conditions from rules
@@ -254,25 +242,7 @@ export const CharacterProvider = ({ children }) => {
                     })),
                     resistances: { ...defaultData.resistances, ...(parsed.resistances || {}) },
                     conditions: { ...defaultData.conditions, ...(parsed.conditions || {}) },
-                    talents: parsed.talents || defaultData.talents,
-                    inventory: (parsed.inventory || []).map(item => {
-                        if (item.uses && item.currentUses === undefined) {
-                            const [curr, max] = item.uses.split('/').map(v => parseInt(v.trim()));
-                            const { uses, ...rest } = item;
-                            return {
-                                ...rest,
-                                currentUses: isNaN(curr) ? 0 : curr,
-                                maxUses: isNaN(max) ? 0 : max
-                            };
-                        }
-                        return { currentUses: 0, maxUses: 0, ...item };
-                    }),
-                    peculiarities: (parsed.peculiarities || []).map(pec => ({
-                        description: "",
-                        ...pec
-                    })),
-                    biography: parsed.biography || "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
-                    currency: parsed.currency || { po: 1250, pp: 45, pc: 0 }
+                    talents: parsed.talents || defaultData.talents
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
@@ -560,70 +530,6 @@ export const CharacterProvider = ({ children }) => {
     };
 
     // --- INVENTORY CRUD ---
-    const addInventoryItem = (item) => {
-        if (!isEditMode) return;
-        setCharacterData(prev => ({
-            ...prev,
-            inventory: [...(prev.inventory || []), { ...item, id: Date.now().toString() }]
-        }));
-    };
-
-    const updateInventoryItem = (id, updatedItem) => {
-        if (!isEditMode) return;
-        setCharacterData(prev => ({
-            ...prev,
-            inventory: (prev.inventory || []).map(item => item.id === id ? { ...item, ...updatedItem } : item)
-        }));
-    };
-
-    const deleteInventoryItem = (id) => {
-        if (!isEditMode) return;
-        setCharacterData(prev => ({
-            ...prev,
-            inventory: (prev.inventory || []).filter(item => item.id !== id)
-        }));
-    };
-
-    // --- PECULIARITIES CRUD ---
-    const addPeculiarity = (pec) => {
-        if (!isEditMode) return;
-        setCharacterData(prev => ({
-            ...prev,
-            peculiarities: [...(prev.peculiarities || []), { ...pec, id: Date.now().toString() }]
-        }));
-    };
-
-    const updatePeculiarity = (id, updatedPec) => {
-        if (!isEditMode) return;
-        setCharacterData(prev => ({
-            ...prev,
-            peculiarities: (prev.peculiarities || []).map(pec => pec.id === id ? { ...pec, ...updatedPec } : pec)
-        }));
-    };
-
-    const deletePeculiarity = (id) => {
-        if (!isEditMode) return;
-        setCharacterData(prev => ({
-            ...prev,
-            peculiarities: (prev.peculiarities || []).filter(pec => pec.id !== id)
-        }));
-    };
-
-    // --- BIOGRAPHY & CURRENCY ---
-    const updateBiography = (text) => {
-        if (!isEditMode) return;
-        setCharacterData(prev => ({ ...prev, biography: text }));
-    };
-
-    const updateCurrency = (field, value) => {
-        if (!isEditMode) return;
-        const newValue = Math.max(0, parseInt(value) || 0);
-        setCharacterData(prev => ({
-            ...prev,
-            currency: { ...prev.currency, [field]: newValue }
-        }));
-    };
-
     const updateName = (newName) => {
         if (!isEditMode) return;
         setCharacterData(prev => ({
@@ -728,15 +634,6 @@ export const CharacterProvider = ({ children }) => {
         updateTalent,
         deleteTalent,
         consumeResources,
-        addInventoryItem,
-        updateInventoryItem,
-        deleteInventoryItem,
-        addPeculiarity,
-        updatePeculiarity,
-        deletePeculiarity,
-        updateBiography,
-
-        updateCurrency,
         updateName,
         updateLevel,
         updateXp,
