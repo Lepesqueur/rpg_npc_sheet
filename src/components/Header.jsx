@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from './Toast';
+import CharacterManager from './CharacterManager';
 
 const Header = () => {
     const { isEditMode, toggleEditMode, characterData, updateName, updateSpeed, updatePerception, updateStatus, exportCharacter, importCharacter } = useCharacter();
 
     const { showToast } = useToast();
     const fileInputRef = useRef(null);
+    const [isManagerOpen, setIsManagerOpen] = useState(false);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -86,6 +88,17 @@ const Header = () => {
                 <div className="h-6 w-px bg-white/10 mx-1"></div>
 
                 <button
+                    onClick={() => setIsManagerOpen(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cyber-yellow/10 border border-cyber-yellow/40 text-cyber-yellow hover:bg-cyber-yellow/20 hover:shadow-[0_0_15px_rgba(255,215,0,0.15)] transition-all font-bold text-[10px] uppercase tracking-wider"
+                    title="Biblioteca de NPCs"
+                >
+                    <i className="fa-solid fa-users-viewfinder"></i>
+                    <span className="hidden sm:inline">Biblioteca</span>
+                </button>
+
+                <div className="h-6 w-px bg-white/10 mx-1"></div>
+
+                <button
                     onClick={toggleEditMode}
                     className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-all duration-300 ${isEditMode
                         ? 'bg-cyber-yellow/20 border-cyber-yellow text-cyber-yellow shadow-[0_0_15px_rgba(255,215,0,0.3)]'
@@ -96,6 +109,8 @@ const Header = () => {
                     <i className={`fa-solid ${isEditMode ? 'fa-unlock-keyhole' : 'fa-lock'} text-xs`}></i>
                 </button>
             </div>
+
+            <CharacterManager isOpen={isManagerOpen} onClose={() => setIsManagerOpen(false)} />
         </header>
     );
 };
