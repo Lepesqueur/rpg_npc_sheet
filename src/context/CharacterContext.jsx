@@ -254,10 +254,11 @@ export const CharacterProvider = ({ children }) => {
                                 return {
                                     ...skill,
                                     icon: ruleSkill.icon,
-                                    attr: ruleSkill.attr
+                                    attr: ruleSkill.attr,
+                                    visible: skill.visible !== undefined ? skill.visible : false // Default visibility
                                 };
                             }
-                            return skill;
+                            return { ...skill, visible: skill.visible !== undefined ? skill.visible : false };
                         });
                     }
                 });
@@ -345,6 +346,28 @@ export const CharacterProvider = ({ children }) => {
             const updatedSkills = category.skills.map(skill => {
                 if (skill.name === skillName) {
                     return { ...skill, level: skill.level === newLevel ? newLevel - 1 : newLevel };
+                }
+                return skill;
+            });
+            category.skills = updatedSkills;
+            updatedCategories[categoryKey] = category;
+
+            return {
+                ...prev,
+                skillCategories: updatedCategories
+            };
+        });
+    };
+
+    const toggleSkillVisibility = (categoryKey, skillName) => {
+        if (!isEditMode) return;
+
+        setCharacterData(prev => {
+            const updatedCategories = { ...prev.skillCategories };
+            const category = { ...updatedCategories[categoryKey] };
+            const updatedSkills = category.skills.map(skill => {
+                if (skill.name === skillName) {
+                    return { ...skill, visible: !skill.visible };
                 }
                 return skill;
             });
@@ -618,6 +641,7 @@ export const CharacterProvider = ({ children }) => {
         updateStatus,
         updateConditionLevel,
         updateSkillLevel,
+        toggleSkillVisibility,
         addAttack,
         updateAttack,
         deleteAttack,
