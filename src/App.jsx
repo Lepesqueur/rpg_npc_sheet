@@ -1,21 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from './components/Header';
 import StatsGrid from './components/StatsGrid';
-import Navigation from './components/Navigation';
 import CombatTab from './tabs/CombatTab';
 import { CharacterProvider } from './context/CharacterContext';
 import { ToastProvider } from './components/Toast';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('combat');
-
-  const renderTab = () => {
-    switch (activeTab) {
-      case 'combat': return <CombatTab />;
-      default: return <CombatTab />;
-    }
-  };
-
   return (
     <ToastProvider>
       <CharacterProvider>
@@ -23,10 +13,9 @@ function App() {
           <div className="max-w-7xl mx-auto px-4 py-8 md:px-8">
             <Header />
             <StatsGrid />
-            <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
 
             <div className="min-h-[500px]">
-              {renderTab()}
+              <CombatTab />
             </div>
 
             <footer className="mt-20 pt-8 border-t border-white/5 text-center">
