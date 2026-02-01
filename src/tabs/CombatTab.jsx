@@ -704,6 +704,73 @@ const CombatTab = () => {
                     </div>
 
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink font-display">Perícias Selecionadas</h3>
+                            {isEditMode && (
+                                <button
+                                    onClick={() => setIsManageModalOpen(true)}
+                                    className="text-cyber-pink hover:text-white transition-colors text-[10px] uppercase font-bold tracking-widest flex items-center gap-1"
+                                >
+                                    <i className="fa-solid fa-list-check"></i>
+                                    Gerenciar
+                                </button>
+                            )}
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            {visibleSkills.length > 0 ? (
+                                visibleSkills.map((skill) => (
+                                    <div
+                                        key={skill.name}
+                                        onClick={() => !isEditMode && setRollingSkill(skill)}
+                                        className={`group relative bg-black/20 border border-white/5 rounded-lg p-2.5 transition-all duration-300 ${!isEditMode ? 'cursor-pointer hover:border-cyber-pink/50 hover:bg-white/5' : ''}`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-cyber-pink group-hover:bg-cyber-pink group-hover:text-black transition-all shrink-0">
+                                                <i className={`fa-solid ${skill.icon} text-xs`}></i>
+                                            </div>
+                                            <div className="flex-grow min-w-0">
+                                                <div className="text-xs font-bold text-gray-200 truncate leading-none">{skill.name}</div>
+                                                <div className="flex items-center gap-1 mt-1">
+                                                    {(Array.isArray(skill.attr) ? skill.attr : [skill.attr]).map((a) => (
+                                                        <span key={a} className={`text-[8px] px-1 py-0.5 rounded font-mono uppercase font-black tracking-tighter ${getAttrColor(a)}`}>
+                                                            {a === 'INTUI' ? 'INTU' : a}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-0.5 shrink-0">
+                                                {[1, 2, 3].map((i) => (
+                                                    <div
+                                                        key={i}
+                                                        onClick={(e) => {
+                                                            if (isEditMode) {
+                                                                e.stopPropagation();
+                                                                updateSkillLevel(skill.categoryKey, skill.name, i);
+                                                            }
+                                                        }}
+                                                        className={`w-3.5 h-3.5 flex items-center justify-center transition-all duration-300 ${isEditMode ? 'hover:scale-125 cursor-pointer' : 'cursor-default'} ${i > skill.level
+                                                            ? 'opacity-10'
+                                                            : i === 3
+                                                                ? 'text-cyber-cyan text-glow-cyan'
+                                                                : 'text-cyber-yellow text-glow-yellow'
+                                                            }`}
+                                                    >
+                                                        <i className="fa-solid fa-diamond text-[8px]"></i>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="py-8 text-center text-gray-600 border border-dashed border-white/5 rounded-xl bg-black/40">
+                                    <p className="text-[10px] uppercase font-bold tracking-widest">Nenhuma perícia selecionada</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-yellow font-display">Resistência a dano</h3>
                             {isEditMode && (
@@ -789,6 +856,42 @@ const CombatTab = () => {
                             )}
                         </div>
                     </div>
+                </div>
+
+                {/* 5. STATUS E CONDIÇÕES & PERÍCIAS SELECIONADAS */}
+                <div className="lg:col-span-3 flex flex-col gap-6">
+                    <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
+                        <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-6 pl-3 border-l-4 border-cyber-yellow font-display">Status e Condições</h3>
+                        <div className="flex flex-col gap-6 items-center mb-2">
+                            <CircularProgress
+                                value={characterData.vitality.current}
+                                max={characterData.vitality.max}
+                                color="#ff0099"
+                                label="Vitalidade"
+                                sublabel="Ferida"
+                                statusKey="vitality"
+                                isEditMode={isEditMode}
+                            />
+                            <CircularProgress
+                                value={characterData.focus.current}
+                                max={characterData.focus.max}
+                                color="#bd00ff"
+                                label="Foco"
+                                sublabel="Fadiga"
+                                statusKey="focus"
+                                isEditMode={isEditMode}
+                            />
+                            <CircularProgress
+                                value={characterData.will.current}
+                                max={characterData.will.max}
+                                color="#ffd700"
+                                label="Vontade"
+                                sublabel="Trauma"
+                                statusKey="will"
+                                isEditMode={isEditMode}
+                            />
+                        </div>
+                    </div>
 
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
                         <div className="flex justify-between items-center mb-4">
@@ -857,109 +960,6 @@ const CombatTab = () => {
                             })}
                             {!Object.values(characterData.conditions || {}).some(c => c.active) && (
                                 <span className="text-cyber-gray text-[10px] italic opacity-50 flex items-center justify-center w-full">Nenhuma condição ativa</span>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                {/* 5. STATUS E CONDIÇÕES & PERÍCIAS SELECIONADAS */}
-                <div className="lg:col-span-3 flex flex-col gap-6">
-                    <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
-                        <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-6 pl-3 border-l-4 border-cyber-yellow font-display">Status e Condições</h3>
-                        <div className="flex flex-col gap-6 items-center mb-2">
-                            <CircularProgress
-                                value={characterData.vitality.current}
-                                max={characterData.vitality.max}
-                                color="#ff0099"
-                                label="Vitalidade"
-                                sublabel="Ferida"
-                                statusKey="vitality"
-                                isEditMode={isEditMode}
-                            />
-                            <CircularProgress
-                                value={characterData.focus.current}
-                                max={characterData.focus.max}
-                                color="#bd00ff"
-                                label="Foco"
-                                sublabel="Fadiga"
-                                statusKey="focus"
-                                isEditMode={isEditMode}
-                            />
-                            <CircularProgress
-                                value={characterData.will.current}
-                                max={characterData.will.max}
-                                color="#ffd700"
-                                label="Vontade"
-                                sublabel="Trauma"
-                                statusKey="will"
-                                isEditMode={isEditMode}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink font-display">Perícias Selecionadas</h3>
-                            {isEditMode && (
-                                <button
-                                    onClick={() => setIsManageModalOpen(true)}
-                                    className="text-cyber-pink hover:text-white transition-colors text-[10px] uppercase font-bold tracking-widest flex items-center gap-1"
-                                >
-                                    <i className="fa-solid fa-list-check"></i>
-                                    Gerenciar
-                                </button>
-                            )}
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            {visibleSkills.length > 0 ? (
-                                visibleSkills.map((skill) => (
-                                    <div
-                                        key={skill.name}
-                                        onClick={() => !isEditMode && setRollingSkill(skill)}
-                                        className={`group relative bg-black/20 border border-white/5 rounded-lg p-2.5 transition-all duration-300 ${!isEditMode ? 'cursor-pointer hover:border-cyber-pink/50 hover:bg-white/5' : ''}`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-cyber-pink group-hover:bg-cyber-pink group-hover:text-black transition-all shrink-0">
-                                                <i className={`fa-solid ${skill.icon} text-xs`}></i>
-                                            </div>
-                                            <div className="flex-grow min-w-0">
-                                                <div className="text-xs font-bold text-gray-200 truncate leading-none">{skill.name}</div>
-                                                <div className="flex items-center gap-1 mt-1">
-                                                    {(Array.isArray(skill.attr) ? skill.attr : [skill.attr]).map((a) => (
-                                                        <span key={a} className={`text-[8px] px-1 py-0.5 rounded font-mono uppercase font-black tracking-tighter ${getAttrColor(a)}`}>
-                                                            {a === 'INTUI' ? 'INTU' : a}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div className="flex gap-0.5 shrink-0">
-                                                {[1, 2, 3].map((i) => (
-                                                    <div
-                                                        key={i}
-                                                        onClick={(e) => {
-                                                            if (isEditMode) {
-                                                                e.stopPropagation();
-                                                                updateSkillLevel(skill.categoryKey, skill.name, i);
-                                                            }
-                                                        }}
-                                                        className={`w-3.5 h-3.5 flex items-center justify-center transition-all duration-300 ${isEditMode ? 'hover:scale-125 cursor-pointer' : 'cursor-default'} ${i > skill.level
-                                                            ? 'opacity-10'
-                                                            : i === 3
-                                                                ? 'text-cyber-cyan text-glow-cyan'
-                                                                : 'text-cyber-yellow text-glow-yellow'
-                                                            }`}
-                                                    >
-                                                        <i className="fa-solid fa-diamond text-[8px]"></i>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="py-8 text-center text-gray-600 border border-dashed border-white/5 rounded-xl bg-black/40">
-                                    <p className="text-[10px] uppercase font-bold tracking-widest">Nenhuma perícia selecionada</p>
-                                </div>
                             )}
                         </div>
                     </div>
