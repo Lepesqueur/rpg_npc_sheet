@@ -3,7 +3,6 @@ import Header from './components/Header';
 import StatsGrid from './components/StatsGrid';
 import Navigation from './components/Navigation';
 import CombatTab from './tabs/CombatTab';
-import FeatTab from './tabs/FeatTab';
 import { CharacterProvider } from './context/CharacterContext';
 import { ToastProvider } from './components/Toast';
 
@@ -13,7 +12,6 @@ function App() {
   const renderTab = () => {
     switch (activeTab) {
       case 'combat': return <CombatTab />;
-      case 'skills': return <FeatTab />;
       default: return <CombatTab />;
     }
   };
