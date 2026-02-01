@@ -3,7 +3,7 @@
 Bem-vindo à **Ficha de NPC (Non-Player Character)** para RPG. Esta é uma versão simplificada e otimizada para o Mestre de Jogo (GM), permitindo o gerenciamento rápido de múltiplos personagens em uma única interface. 
 
 > [!NOTE]
-> Se você procura a **Ficha de Personagem (PC)** completa e detalhada para jogadores, confira o [outro projeto aqui](https://github.com/marcus/rpg-sheet).
+> Se você procura a **Ficha de Personagem (PC)** completa e detalhada para jogadores, confira o [outro projeto aqui](https://github.com/lepesqueur/rpg_npc_sheet/).
 
 Trata-se de uma PWA (Progressive Web App) criada para gerenciar fichas de NPC com estilo, agilidade e automação. O sistema de regras é *homebrew*, idealizado por **Arthur Lobato**.
 
