@@ -58,44 +58,9 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* Middle Section: Stats (Speed/Perception) */}
-            <div className="flex items-center gap-4 shrink-0 md:ml-auto">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/40 border border-white/10">
-                    <i className="fa-solid fa-person-running text-cyber-pink text-xs"></i>
-                    <div className="flex flex-col leading-none">
-                        <span className="text-[8px] uppercase tracking-wider text-cyber-gray">Velocidade</span>
-                        {isEditMode ? (
-                            <input
-                                type="text"
-                                value={characterData.speed}
-                                onChange={(e) => updateSpeed(e.target.value)}
-                                className="bg-transparent border-none outline-none w-10 text-white font-bold text-xs p-0 m-0 h-auto"
-                            />
-                        ) : (
-                            <span className="text-white font-bold text-xs">{characterData.speed}</span>
-                        )}
-                    </div>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/40 border border-white/10">
-                    <i className="fa-solid fa-eye text-cyber-purple text-xs"></i>
-                    <div className="flex flex-col leading-none">
-                        <span className="text-[8px] uppercase tracking-wider text-cyber-gray">Percepção</span>
-                        {isEditMode ? (
-                            <input
-                                type="number"
-                                value={characterData.perception}
-                                onChange={(e) => updatePerception(e.target.value)}
-                                className="bg-transparent border-none outline-none w-8 text-white font-bold text-xs p-0 m-0 h-auto"
-                            />
-                        ) : (
-                            <span className="text-white font-bold text-xs">{characterData.perception}</span>
-                        )}
-                    </div>
-                </div>
-            </div>
 
             {/* Right Section: Actions */}
-            <div className="flex items-center gap-2 shrink-0 md:ml-4 border-l border-white/10 pl-4">
+            <div className="flex items-center gap-2 shrink-0 md:ml-auto border-l border-white/10 pl-4">
                 <input
                     type="file"
                     ref={fileInputRef}
