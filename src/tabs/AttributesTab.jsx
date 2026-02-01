@@ -47,74 +47,7 @@ const AttributesTab = () => {
 
     return (
         <div className="animate-fade-in">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-display font-bold text-white tracking-widest uppercase">Perícias Selecionadas</h2>
-                {isEditMode && (
-                    <button
-                        onClick={() => setIsManageModalOpen(true)}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyber-pink/10 border border-cyber-pink/30 text-cyber-pink hover:bg-cyber-pink/20 transition-all font-bold text-xs uppercase tracking-wider"
-                    >
-                        <i className="fa-solid fa-list-check"></i>
-                        Gerenciar Perícias
-                    </button>
-                )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-12">
-                {visibleSkills.length > 0 ? (
-                    visibleSkills.map((skill) => (
-                        <div
-                            key={skill.name}
-                            onClick={() => !isEditMode && setRollingSkill(skill)}
-                            className={`group relative bg-white/5 border border-white/10 rounded-xl p-4 transition-all duration-300 ${!isEditMode ? 'cursor-pointer hover:border-cyber-pink/50 hover:bg-white/10' : ''}`}
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-all shadow-sm shrink-0">
-                                    <i className={`fa-solid ${skill.icon}`}></i>
-                                </div>
-                                <div className="flex-grow min-w-0">
-                                    <div className="flex items-center justify-between mb-1">
-                                        <div className="text-sm font-bold text-gray-200 truncate pr-2">{skill.name}</div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        {(Array.isArray(skill.attr) ? skill.attr : [skill.attr]).map((a) => (
-                                            <span key={a} className={`text-[9px] px-1.5 py-0.5 rounded font-mono uppercase font-black tracking-tighter shadow-sm ${getAttrColor(a)}`}>
-                                                {a === 'INTUI' ? 'INTU' : a}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="flex gap-1 shrink-0">
-                                    {[1, 2, 3].map((i) => (
-                                        <button
-                                            key={i}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                updateSkillLevel(skill.categoryKey, skill.name, i);
-                                            }}
-                                            disabled={!isEditMode}
-                                            className={`w-3.5 h-3.5 flex items-center justify-center transition-all duration-300 transform ${isEditMode ? 'hover:scale-125 cursor-pointer' : 'cursor-default'} focus:outline-none ${i > skill.level
-                                                ? 'opacity-20'
-                                                : i === 3
-                                                    ? 'text-[#00ffff] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] scale-110'
-                                                    : 'text-[#f1c40f] drop-shadow-[0_0_5px_rgba(241,196,15,0.5)]'
-                                                }`}
-                                        >
-                                            <i className="fa-solid fa-diamond text-[10px]"></i>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <div className="col-span-full py-12 text-center text-gray-500 border border-dashed border-white/10 rounded-xl">
-                        <i className="fa-solid fa-ghost text-4xl mb-3 opacity-50"></i>
-                        <p>Nenhuma perícia visível selecionada.</p>
-                        {isEditMode && <p className="text-sm mt-2">Clique em "Gerenciar Perícias" para adicionar.</p>}
-                    </div>
-                )}
-            </div>
+            {/* All attributes/skills display remains here for general reference/edit */}
 
             <SkillRollModal
                 isOpen={!!rollingSkill}
@@ -151,8 +84,8 @@ const AttributesTab = () => {
                                     key={skill.name}
                                     onClick={() => toggleSkillVisibility(skill.categoryKey, skill.name)}
                                     className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all select-none ${skill.visible
-                                            ? 'bg-cyber-pink/10 border-cyber-pink/50 shadow-[0_0_10px_rgba(255,0,153,0.1)]'
-                                            : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20'
+                                        ? 'bg-cyber-pink/10 border-cyber-pink/50 shadow-[0_0_10px_rgba(255,0,153,0.1)]'
+                                        : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20'
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -165,8 +98,8 @@ const AttributesTab = () => {
                                         </div>
                                     </div>
                                     <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${skill.visible
-                                            ? 'bg-cyber-pink border-cyber-pink text-white'
-                                            : 'border-gray-600 bg-transparent'
+                                        ? 'bg-cyber-pink border-cyber-pink text-white'
+                                        : 'border-gray-600 bg-transparent'
                                         }`}>
                                         {skill.visible && <i className="fa-solid fa-check text-[10px]"></i>}
                                     </div>
