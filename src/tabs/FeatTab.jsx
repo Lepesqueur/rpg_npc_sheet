@@ -10,7 +10,6 @@ const FeatTab = () => {
     const { showToast } = useToast();
     const [viewingTalent, setViewingTalent] = useState(null);
     const [editingTalent, setEditingTalent] = useState(null); // Used for both Add and Edit
-    const [searchTerm, setSearchTerm] = useState("");
     const [itemToDelete, setItemToDelete] = useState(null);
     const [rollingSkill, setRollingSkill] = useState(null);
     const [rollingSource, setRollingSource] = useState(null);
@@ -71,13 +70,8 @@ const FeatTab = () => {
         );
     };
 
-    const filteredTalents = talents.filter(t =>
-        t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const actions = filteredTalents.filter(t => t.category === 'actions');
-    const specificTalents = filteredTalents.filter(t => t.category === 'talent');
+    const actions = talents.filter(t => t.category === 'actions');
+    const specificTalents = talents.filter(t => t.category === 'talent');
 
     const handleDelete = (e, id) => {
         e.stopPropagation();
@@ -150,164 +144,85 @@ const FeatTab = () => {
     return (
         <div className="animate-fade-in">
             <section className="glass-card rounded-2xl p-6 min-h-[500px] flex flex-col">
-                <div className="mb-8 relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i className="fa-solid fa-magnifying-glass text-gray-500 text-sm"></i>
-                    </div>
-                    <input
-                        className="w-full bg-black/40 border border-white/10 text-gray-300 rounded-lg pl-11 pr-4 py-3 focus:outline-none focus:border-cyber-pink focus:ring-1 focus:ring-cyber-pink transition-all placeholder:text-gray-600 font-sans"
-                        placeholder="Filtrar habilidades ou talentos..."
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Ações Basicas */}
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-2 h-6 bg-cyber-pink shadow-neon-pink"></div>
-                                <h2 className="text-white font-display font-bold text-lg tracking-widest uppercase">Ações Basicas</h2>
-                            </div>
-                            {isEditMode && (
-                                <button
-                                    onClick={() => setEditingTalent({ category: 'actions', tags: ['Habilidade Ativa'], stats: {}, potencializacoes: [] })}
-                                    className="w-8 h-8 rounded-lg bg-cyber-pink/20 border border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/30 transition-all flex items-center justify-center"
-                                >
-                                    <i className="fa-solid fa-plus text-xs"></i>
-                                </button>
-                            )}
+                <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-2 h-6 bg-cyber-pink shadow-neon-pink"></div>
+                            <h2 className="text-white font-display font-bold text-lg tracking-widest uppercase">Habilidades & Talentos</h2>
                         </div>
-
-                        {actions.map((item) => (
-                            <div
-                                key={item.id}
-                                onClick={() => handleItemClick(item)}
-                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? 'hover:border-cyber-pink bg-cyber-pink/5 shadow-[0_0_15px_rgba(255,0,153,0.1)]' : 'hover:border-cyber-pink/50'} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
+                        {isEditMode && (
+                            <button
+                                onClick={() => setEditingTalent({ category: 'actions', tags: ['Habilidade Ativa'], stats: {}, potencializacoes: [] })}
+                                className="w-8 h-8 rounded-lg bg-cyber-pink/20 border border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/30 transition-all flex items-center justify-center"
                             >
-                                <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
-                                    <div className="flex items-center gap-2">
-                                        {item.costs?.focus > 0 && (
-                                            <span className="flex items-center gap-0.5 text-cyber-purple text-[10px] font-bold" title="Custo de Foco">
-                                                <i className="fa-solid fa-bolt text-[9px]"></i> {item.costs.focus}
-                                            </span>
-                                        )}
-                                        {item.costs?.will > 0 && (
-                                            <span className="flex items-center gap-0.5 text-cyber-yellow text-[10px] font-bold" title="Custo de Vontade">
-                                                <i className="fa-solid fa-brain text-[9px]"></i> {item.costs.will}
-                                            </span>
-                                        )}
-                                        {item.costs?.vitality > 0 && (
-                                            <span className="flex items-center gap-0.5 text-cyber-pink text-[10px] font-bold" title="Custo de Vitalidade">
-                                                <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
-                                            </span>
-                                        )}
-                                        <span className="px-2 py-0.5 bg-cyber-pink/20 text-cyber-pink text-[10px] font-bold border border-cyber-pink/30 rounded uppercase">
-                                            {item.pa} PA
-                                        </span>
-                                    </div>
-                                    {isEditMode && (
-                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                onClick={(e) => handleDelete(e, item.id)}
-                                                className="text-gray-500 hover:text-cyber-pink transition-colors p-1"
-                                            >
-                                                <i className="fa-solid fa-trash text-xs"></i>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="flex items-start gap-4">
-                                    <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-cyber-pink/10 border border-cyber-pink/20 group-hover:shadow-[0_0_10px_#ff009966] transition-all">
-                                        <i className={`fa-solid ${item.icon || 'fa-burst'} text-2xl text-cyber-pink`}></i>
-                                    </div>
-                                    <div className="flex-grow pr-16">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-display text-white font-bold tracking-wider uppercase">{item.name}</h3>
-                                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
-                                                {item.stats?.ativacao || 'Ação'}
-                                            </span>
-                                        </div>
-                                        <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{item.description}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                                <i className="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        )}
                     </div>
-
-                    {/* Talentos */}
                     <div className="space-y-4">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-2 h-6 bg-cyber-yellow shadow-neon-yellow"></div>
-                                <h2 className="text-white font-display font-bold text-lg tracking-widest uppercase">Talentos</h2>
-                            </div>
-                            {isEditMode && (
-                                <button
-                                    onClick={() => setEditingTalent({ category: 'talent', tags: ['Passiva'], stats: {}, potencializacoes: [] })}
-                                    className="w-8 h-8 rounded-lg bg-cyber-yellow/20 border border-cyber-yellow/40 text-cyber-yellow hover:bg-cyber-yellow/30 transition-all flex items-center justify-center"
-                                >
-                                    <i className="fa-solid fa-plus text-xs"></i>
-                                </button>
-                            )}
-                        </div>
+                        {talents.map((item) => {
+                            const isAction = item.category === 'actions';
+                            const mainColor = isAction ? 'cyber-pink' : 'cyber-yellow';
+                            const mainColorBg = isAction ? 'bg-cyber-pink' : 'bg-cyber-yellow';
+                            const mainColorBorder = isAction ? 'border-cyber-pink' : 'border-cyber-yellow';
+                            const mainColorText = isAction ? 'text-cyber-pink' : 'text-cyber-yellow';
+                            const shadowColor = isAction ? 'shadow-[0_0_15px_rgba(255,0,153,0.1)]' : 'shadow-[0_0_15px_rgba(255,215,0,0.1)]';
 
-                        {specificTalents.map((item) => (
-                            <div
-                                key={item.id}
-                                onClick={() => handleItemClick(item)}
-                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? 'hover:border-cyber-yellow bg-cyber-yellow/5 shadow-[0_0_15px_rgba(255,215,0,0.1)]' : 'hover:border-cyber-yellow/50'} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
-                            >
-                                <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
-                                    <div className="flex items-center gap-2">
-                                        {item.costs?.focus > 0 && (
-                                            <span className="flex items-center gap-0.5 text-cyber-purple text-[10px] font-bold" title="Custo de Foco">
-                                                <i className="fa-solid fa-bolt text-[9px]"></i> {item.costs.focus}
-                                            </span>
-                                        )}
-                                        {item.costs?.will > 0 && (
-                                            <span className="flex items-center gap-0.5 text-cyber-yellow text-[10px] font-bold" title="Custo de Vontade">
-                                                <i className="fa-solid fa-brain text-[9px]"></i> {item.costs.will}
-                                            </span>
-                                        )}
-                                        {item.costs?.vitality > 0 && (
-                                            <span className="flex items-center gap-0.5 text-cyber-pink text-[10px] font-bold" title="Custo de Vitalidade">
-                                                <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
-                                            </span>
-                                        )}
-                                        <span className="px-2 py-0.5 bg-cyber-yellow/20 text-cyber-yellow text-[10px] font-bold border border-cyber-yellow/30 rounded uppercase">
-                                            {item.pa} PA
-                                        </span>
-                                    </div>
-                                    {isEditMode && (
-                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                onClick={(e) => handleDelete(e, item.id)}
-                                                className="text-gray-500 hover:text-cyber-yellow transition-colors p-1"
-                                            >
-                                                <i className="fa-solid fa-trash text-xs"></i>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="flex items-start gap-4">
-                                    <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-cyber-yellow/10 border border-cyber-yellow/20 group-hover:shadow-[0_0_10px_#ffd70066] transition-all">
-                                        <i className={`fa-solid ${item.icon || 'fa-star'} text-2xl text-cyber-yellow`}></i>
-                                    </div>
-                                    <div className="flex-grow pr-16">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-display text-white font-bold tracking-wider uppercase">{item.name}</h3>
-                                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
-                                                {item.stats?.ativacao || 'Passiva'}
+                            return (
+                                <div
+                                    key={item.id}
+                                    onClick={() => handleItemClick(item)}
+                                    className={`group relative bg-white/5 border border-white/10 ${isEditMode ? `hover:${mainColorBorder} ${mainColorBg}/5 ${shadowColor}` : `hover:${mainColorBorder}/50`} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
+                                >
+                                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+                                        <div className="flex items-center gap-2">
+                                            {item.costs?.focus > 0 && (
+                                                <span className="flex items-center gap-0.5 text-cyber-purple text-[10px] font-bold" title="Custo de Foco">
+                                                    <i className="fa-solid fa-bolt text-[9px]"></i> {item.costs.focus}
+                                                </span>
+                                            )}
+                                            {item.costs?.will > 0 && (
+                                                <span className="flex items-center gap-0.5 text-cyber-yellow text-[10px] font-bold" title="Custo de Vontade">
+                                                    <i className="fa-solid fa-brain text-[9px]"></i> {item.costs.will}
+                                                </span>
+                                            )}
+                                            {item.costs?.vitality > 0 && (
+                                                <span className="flex items-center gap-0.5 text-cyber-pink text-[10px] font-bold" title="Custo de Vitalidade">
+                                                    <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
+                                                </span>
+                                            )}
+                                            <span className={`px-2 py-0.5 ${mainColorBg}/20 ${mainColorText} text-[10px] font-bold border ${mainColorBorder}/30 rounded uppercase`}>
+                                                {item.pa} PA
                                             </span>
                                         </div>
-                                        <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{item.description}</p>
+                                        {isEditMode && (
+                                            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                    onClick={(e) => handleDelete(e, item.id)}
+                                                    className={`text-gray-500 hover:${mainColorText} transition-colors p-1`}
+                                                >
+                                                    <i className="fa-solid fa-trash text-xs"></i>
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-lg ${mainColorBg}/10 border ${mainColorBorder}/20 group-hover:shadow-[0_0_10px_currentColor] transition-all text-${mainColor}`}>
+                                            <i className={`fa-solid ${item.icon || (isAction ? 'fa-burst' : 'fa-star')} text-2xl`}></i>
+                                        </div>
+                                        <div className="flex-grow pr-16">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <h3 className="font-display text-white font-bold tracking-wider uppercase">{item.name}</h3>
+                                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
+                                                    {item.stats?.ativacao || (isAction ? 'Ação' : 'Passiva')}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{item.description}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>
