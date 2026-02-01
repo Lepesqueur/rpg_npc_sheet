@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'RPG Sheet',
-        short_name: 'RPG Sheet',
-        description: 'A dynamic RPG Character Sheet',
+        name: 'RPG NPC Sheet',
+        short_name: 'NPC Sheet',
+        description: 'A dynamic RPG NPC Sheet',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
