@@ -75,8 +75,56 @@ export const CharacterProvider = ({ children }) => {
             }
         }
 
-        // Default: Start with one example NPC if library is empty
-        return [generateDefaultData("Aeliana, a Arconte")];
+        // Default: Start with a diverse medieval library if empty
+        const defaultCharacters = [
+            {
+                ...generateDefaultData("Grommash, o Quebra-Escudos"),
+                level: 5,
+                attributes: ATTRIBUTES.map(a => a.name === 'Vigor' ? { ...a, value: 22 } : a.name === 'Tamanho' ? { ...a, value: 18 } : a),
+                vitality: { current: 120, max: 120, level: 0 },
+                attacks: [
+                    { id: 'g1', name: 'Machado de Batalha', ap: 3, costs: { vitality: 3, focus: 0, will: 0 }, damage: 18, range: 'Melee', wear: 0, skill: 'Pesadas', properties: 'Brutal', damageType: 'corte' }
+                ]
+            },
+            {
+                ...generateDefaultData("Valerius, o Iluminado"),
+                level: 4,
+                attributes: ATTRIBUTES.map(a => a.name === 'Intuição' ? { ...a, value: 20 } : a.name === 'Presença' ? { ...a, value: 18 } : a),
+                will: { current: 60, max: 60, level: 0 },
+                attacks: [
+                    { id: 'v1', name: 'Maça Sagrada', ap: 3, costs: { vitality: 0, focus: 0, will: 2 }, damage: 12, range: 'Melee', wear: 0, skill: 'Pesadas', properties: 'Radiante', damageType: 'impacto' }
+                ]
+            },
+            {
+                ...generateDefaultData("Elowen da Floresta"),
+                level: 3,
+                attributes: ATTRIBUTES.map(a => a.name === 'Destreza' ? { ...a, value: 24 } : a.name === 'Intuição' ? { ...a, value: 18 } : a),
+                focus: { current: 50, max: 50, level: 0 },
+                attacks: [
+                    { id: 'e1', name: 'Arco Longo Élfico', ap: 4, costs: { vitality: 0, focus: 3, will: 0 }, damage: 15, range: '30m', wear: 0, skill: 'Arqueirismo', properties: 'Preciso', damageType: 'perfuracao' }
+                ]
+            },
+            {
+                ...generateDefaultData("Nyx, a Sombra"),
+                level: 6,
+                attributes: ATTRIBUTES.map(a => a.name === 'Destreza' ? { ...a, value: 26 } : a.name === 'Intelecto' ? { ...a, value: 16 } : a),
+                vitality: { current: 70, max: 70, level: 0 },
+                attacks: [
+                    { id: 'n1', name: 'Adaga de Veneno', ap: 2, costs: { vitality: 1, focus: 2, will: 0 }, damage: 8, range: 'Melee', wear: 0, skill: 'Rápidas', properties: 'Venenosa', damageType: 'perfuracao' }
+                ]
+            },
+            {
+                ...generateDefaultData("Malakor, o Arquimago"),
+                level: 8,
+                attributes: ATTRIBUTES.map(a => a.name === 'Intelecto' ? { ...a, value: 28 } : a.name === 'Intuição' ? { ...a, value: 20 } : a),
+                focus: { current: 100, max: 100, level: 0 },
+                will: { current: 80, max: 80, level: 0 },
+                attacks: [
+                    { id: 'm1', name: 'Cajado de Éter', ap: 3, costs: { vitality: 0, focus: 10, will: 5 }, damage: 25, range: '15m', wear: 0, skill: 'Arcana', properties: 'Mágico', damageType: 'psiquico' }
+                ]
+            }
+        ];
+        return defaultCharacters;
     });
 
     const [activeCharacterId, setActiveCharacterId] = useState(() => {
@@ -108,6 +156,56 @@ export const CharacterProvider = ({ children }) => {
     useEffect(() => {
         localStorage.setItem('active_npc_id', activeCharacterId);
     }, [activeCharacterId]);
+
+    // Force seed medieval characters if they don't exist in the current library
+    useEffect(() => {
+        const medievalNames = ["Grommash, o Quebra-Escudos", "Valerius, o Iluminado", "Elowen da Floresta", "Nyx, a Sombra", "Malakor, o Arquimago"];
+        const hasMedieval = npcLibrary.some(npc => medievalNames.includes(npc.name));
+
+        if (!hasMedieval) {
+            setNpcLibrary(prev => {
+                const defaultCharacters = [
+                    {
+                        ...generateDefaultData("Grommash, o Quebra-Escudos"),
+                        level: 5,
+                        attributes: ATTRIBUTES.map(a => a.name === 'Vigor' ? { ...a, value: 22 } : a.name === 'Tamanho' ? { ...a, value: 18 } : a),
+                        vitality: { current: 120, max: 120, level: 0 },
+                        attacks: [{ id: 'g1', name: 'Machado de Batalha', ap: 3, costs: { vitality: 3, focus: 0, will: 0 }, damage: 18, range: 'Melee', wear: 0, skill: 'Pesadas', properties: 'Brutal', damageType: 'corte' }]
+                    },
+                    {
+                        ...generateDefaultData("Valerius, o Iluminado"),
+                        level: 4,
+                        attributes: ATTRIBUTES.map(a => a.name === 'Intuição' ? { ...a, value: 20 } : a.name === 'Presença' ? { ...a, value: 18 } : a),
+                        will: { current: 60, max: 60, level: 0 },
+                        attacks: [{ id: 'v1', name: 'Maça Sagrada', ap: 3, costs: { vitality: 0, focus: 0, will: 2 }, damage: 12, range: 'Melee', wear: 0, skill: 'Pesadas', properties: 'Radiante', damageType: 'impacto' }]
+                    },
+                    {
+                        ...generateDefaultData("Elowen da Floresta"),
+                        level: 3,
+                        attributes: ATTRIBUTES.map(a => a.name === 'Destreza' ? { ...a, value: 24 } : a.name === 'Intuição' ? { ...a, value: 18 } : a),
+                        focus: { current: 50, max: 50, level: 0 },
+                        attacks: [{ id: 'e1', name: 'Arco Longo Élfico', ap: 4, costs: { vitality: 0, focus: 3, will: 0 }, damage: 15, range: '30m', wear: 0, skill: 'Arqueirismo', properties: 'Preciso', damageType: 'perfuracao' }]
+                    },
+                    {
+                        ...generateDefaultData("Nyx, a Sombra"),
+                        level: 6,
+                        attributes: ATTRIBUTES.map(a => a.name === 'Destreza' ? { ...a, value: 26 } : a.name === 'Intelecto' ? { ...a, value: 16 } : a),
+                        vitality: { current: 70, max: 70, level: 0 },
+                        attacks: [{ id: 'n1', name: 'Adaga de Veneno', ap: 2, costs: { vitality: 1, focus: 2, will: 0 }, damage: 8, range: 'Melee', wear: 0, skill: 'Rápidas', properties: 'Venenosa', damageType: 'perfuracao' }]
+                    },
+                    {
+                        ...generateDefaultData("Malakor, o Arquimago"),
+                        level: 8,
+                        attributes: ATTRIBUTES.map(a => a.name === 'Intelecto' ? { ...a, value: 28 } : a.name === 'Intuição' ? { ...a, value: 20 } : a),
+                        focus: { current: 100, max: 100, level: 0 },
+                        will: { current: 80, max: 80, level: 0 },
+                        attacks: [{ id: 'm1', name: 'Cajado de Éter', ap: 3, costs: { vitality: 0, focus: 10, will: 5 }, damage: 25, range: '15m', wear: 0, skill: 'Arcana', properties: 'Mágico', damageType: 'psiquico' }]
+                    }
+                ];
+                return [...prev, ...defaultCharacters];
+            });
+        }
+    }, []);
 
     // --- Library Actions ---
     const switchNPC = (id) => {

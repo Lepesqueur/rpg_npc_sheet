@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useCharacter } from '../context/CharacterContext';
 
 const CharacterManager = ({ isOpen, onClose }) => {
     const { npcLibrary, activeCharacterId, switchNPC, createNPC, duplicateNPC, deleteNPC } = useCharacter();
     const [newNPCName, setNewNPCName] = useState('');
+
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleEsc);
+        return () => window.removeEventListener('keydown', handleEsc);
+    }, [isOpen, onClose]);
 
     if (!isOpen) return null;
 
@@ -15,16 +25,16 @@ const CharacterManager = ({ isOpen, onClose }) => {
         }
     };
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in"
                 onClick={onClose}
             ></div>
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-2xl glass-card rounded-xl border border-white/10 shadow-2xl flex flex-col max-h-[80vh]">
+            <div className="relative w-full max-w-2xl glass-card rounded-xl border border-white/10 shadow-2xl flex flex-col max-h-[80vh] animate-scale-up overflow-hidden">
                 {/* Header */}
                 <div className="p-6 border-b border-white/5 flex justify-between items-center bg-black/40">
                     <div>
@@ -43,7 +53,7 @@ const CharacterManager = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* List Body */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-3 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto p-6 space-y-3 custom-scrollbar bg-[#0d0d12]/95 backdrop-blur-md">
                     {npcLibrary.map((npc) => (
                         <div
                             key={npc.id}
@@ -120,7 +130,8 @@ const CharacterManager = ({ isOpen, onClose }) => {
                     </form>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
