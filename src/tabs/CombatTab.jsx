@@ -896,11 +896,9 @@ const CombatTab = () => {
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink font-display">Condições ativas</h3>
-                            {isEditMode && (
-                                <button onClick={openConditionsModal} className="text-cyber-gray hover:text-white transition-colors">
-                                    <i className="fa-solid fa-pen-to-square text-xs"></i>
-                                </button>
-                            )}
+                            <button onClick={openConditionsModal} className="text-cyber-gray hover:text-white transition-colors">
+                                <i className="fa-solid fa-pen-to-square text-xs"></i>
+                            </button>
                         </div>
                         <div className="flex flex-wrap gap-2 p-2 rounded-lg bg-black/20 border border-white/5 min-h-[60px]">
                             {Object.entries(characterData.conditions || {}).map(([key, cond]) => {
