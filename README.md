@@ -1,8 +1,19 @@
-# Ficha de RPG - PC (PWA)
+# Ficha de RPG - NPC (PWA)
 
-Bem-vindo à **Ficha de Personagem de RPG** do futuro (ou quase isso). Trata-se de uma PWA (Progressive Web App) — ou seja, um site que finge muito bem ser um aplicativo nativo — criada para gerenciar fichas de RPG com estilo, automação e zero papelada. O sistema de regras é *homebrew*, idealizado pelo meu amigo **Arthur Lobato**.
+Bem-vindo à **Ficha de NPC (Non-Player Character)** para RPG. Esta é uma versão simplificada e otimizada para o Mestre de Jogo (GM), permitindo o gerenciamento rápido de múltiplos personagens em uma única interface. 
 
-> **⚠️ SPOILER / DISCLAIMER**: Sim, este projeto serve como portfólio, mas também foi uma ótima desculpa para eu brincar com as novas IAs do Google e ver se elas aguentam o tranco no "mundo real".
+> [!NOTE]
+> Se você procura a **Ficha de Personagem (PC)** completa e detalhada para jogadores, confira o [outro projeto aqui](https://github.com/marcus/rpg-sheet).
+
+Trata-se de uma PWA (Progressive Web App) criada para gerenciar fichas de NPC com estilo, agilidade e automação. O sistema de regras é *homebrew*, idealizado por **Arthur Lobato**.
+
+## 👥 Biblioteca de NPCs (GM Tool)
+
+A principal diferença desta versão é a **Biblioteca de Personagens**. Diferente da ficha de jogador única, aqui o mestre pode:
+*   **Criar múltiplos NPCs** rapidamente durante a sessão.
+*   **Duplicar fichas** para criar variações de inimigos (ex: Guardas, Bandidos).
+*   **Alternar instantaneamente** entre diferentes fichas sem recarregar a página.
+*   **Gerenciar encontros** de forma muito mais fluida com todos os stats essenciais em uma visão consolidada.
 
 ## 🤖 Humans + AI (O tal do Tech Showcase)
 
@@ -19,30 +30,15 @@ A parte mais legal? **Fazer este app foi a minha maneira de aprender as regras.*
 
 Ao transformar as mecânicas de jogo em lógica de código (`if`, `else`, `state`), fui obrigado a entender cada minúcia do sistema. Se o código funciona, é porque eu entendi a regra. É a engenharia reversa do RPG: aprender jogando... linhas de código.
 
-Tudo no sistema gira em torno da **centralidade da gestão de recursos**. Aqui a "economia" é baseada em três pilares: **Vitalidade, Vontade e Foco**. Cada ação consome algo, e gerenciar essa escassez é o que separa os heróis dos cadáveres. 
-
-📚 **Em Breve no Mundo Real**: O sistema é tão bom que vai transcender o digital. Um **Livro Físico** está sendo preparado para espalhar a palavra pelo mundo. Fiquem ligados.
-
-## � Status: Obras & Updates (Acalmem os ânimos)
-
-O app está funcional, mas não está finalizado. Por quê? Porque o sistema do RPG ainda está em fase de "Beta Test Raiz".
-
-Estamos esperando as regras se estabilizarem nas mesas de jogo antes de implementar novas funcionalidades. Afinal, ninguém quer codar um sistema complexo hoje para ter que refazer tudo amanhã.
-
-## �📋 Natureza e Propósito
-
-A ideia é simples: substituir aquela ficha de papel amassada e cheia de marcas de borracha por algo digital que roda no seu celular ou PC. Além de salvar árvores, serve como meu atestado de que sei fazer **PWAs** bonitas e funcionais.
-
-O objetivo principal é agilizar a matemática e a gestão de recursos do jogo, permitindo que o jogador foque na narrativa e na interpretação.
-
 ## ✨ Principais Funcionalidades
 
-*   **Temas Visuais**: Suporte a múltiplos temas (Atualmente **Cyberpunk** e **Medieval/Pergaminho**), adaptando-se à ambientação da sua campanha.
+*   **Biblioteca de Personagens**: Crie, clone, mude e apague NPCs dinamicamente.
+*   **Visão Simplificada**: Interface limpa focada nos stats que o mestre precisa ver rápido (Atributos, Percepção, Velocidade, Combate).
+*   **Temas Visuais**: Suporte a múltiplos temas (Atualmente **Cyberpunk** e **Medieval/Pergaminho**).
 *   **Automação de Regras**: Cálculos automáticos de bônus, custos de habilidades e rolagens de dados.
-*   **Gestão de Recursos**: Controle fácil de **Vitalidade**, **Focus** e **Vontade**, com validação de custos para ações.
+*   **Gestão de Recursos**: Controle fácil de **Vitalidade**, **Focus** e **Vontade**.
 *   **Sistema de Combate**: Área dedicada para Defesa, Resistências e Condições Ativas.
-*   **Inventário e Notas**: Gerenciamento de itens, biografia e anotações gerais.
-*   **Persistência Local**: Todos os dados são salvos automaticamente no navegador do usuário (LocalStorage), garantindo que nada seja perdido ao fechar a aba.
+*   **Persistência Local**: Toda a sua biblioteca de NPCs é salva automaticamente no navegador (LocalStorage).
 
 ## 🛠️ Tecnologias
 
