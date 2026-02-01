@@ -3,7 +3,7 @@ import { useCharacter } from '../context/CharacterContext';
 import { useToast } from './Toast';
 
 const Header = () => {
-    const { isEditMode, toggleEditMode, characterData, updateName, updateLevel, updateSpeed, updatePerception, updateStatus, exportCharacter, importCharacter } = useCharacter();
+    const { isEditMode, toggleEditMode, characterData, updateName, updateSpeed, updatePerception, updateStatus, exportCharacter, importCharacter } = useCharacter();
 
     const { showToast } = useToast();
     const fileInputRef = useRef(null);
@@ -54,20 +54,6 @@ const Header = () => {
                         ) : (
                             <h1 className="text-xl font-bold tracking-wide text-white uppercase font-display">{characterData.name}</h1>
                         )}
-                        <div className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded border border-white/10 shrink-0">
-                            <span className="text-[10px] text-cyber-gray font-bold uppercase">Nível</span>
-                            {isEditMode ? (
-                                <input
-                                    type="number"
-                                    value={characterData.level}
-                                    onChange={(e) => updateLevel(e.target.value)}
-                                    className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-8 text-center text-white text-sm font-bold"
-                                    min="1"
-                                />
-                            ) : (
-                                <span className="text-white text-sm font-bold">{characterData.level}</span>
-                            )}
-                        </div>
                     </div>
                 </div>
             </div>
