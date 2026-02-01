@@ -319,11 +319,16 @@ const CombatTab = () => {
 
     const handleRollConfirm = () => {
         if (rollingSource && rollingSource.costs) {
+            // Check if consumption should be skipped (e.g., already consumed by handleActivateFeat)
+            if (rollingSource.skipConsumption) {
+                return true;
+            }
+
             const hasCosts = Object.values(rollingSource.costs).some(cost => cost > 0);
             if (hasCosts) {
                 const result = consumeResources(rollingSource.costs);
                 if (result.success) {
-                    showToast(`ATAQUE "${rollingSource.name}" REALIZADO! RECURSOS CONSUMIDOS.`, 'success');
+                    showToast(`${rollingSource.name.toUpperCase()} REALIZADO! RECURSOS CONSUMIDOS.`, 'success');
                     return true;
                 } else {
                     showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
@@ -368,7 +373,8 @@ const CombatTab = () => {
                 const skill = allSkills.find(s => s.name === feat.relatedSkill);
                 if (skill) {
                     setRollingSkill(skill);
-                    setRollingSource({ ...feat, costs: totalCosts });
+                    // Pass skipConsumption flag because resources were just consumed above
+                    setRollingSource({ ...feat, costs: totalCosts, skipConsumption: true });
                 }
             }
             setSelectedPots([]);
