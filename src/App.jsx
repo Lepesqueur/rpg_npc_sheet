@@ -2,21 +2,19 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import StatsGrid from './components/StatsGrid';
 import Navigation from './components/Navigation';
-import AttributesTab from './tabs/AttributesTab';
 import CombatTab from './tabs/CombatTab';
 import FeatTab from './tabs/FeatTab';
 import { CharacterProvider } from './context/CharacterContext';
 import { ToastProvider } from './components/Toast';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('attributes');
+  const [activeTab, setActiveTab] = useState('combat');
 
   const renderTab = () => {
     switch (activeTab) {
-      case 'attributes': return <AttributesTab />;
       case 'combat': return <CombatTab />;
       case 'skills': return <FeatTab />;
-      default: return <AttributesTab />;
+      default: return <CombatTab />;
     }
   };
 

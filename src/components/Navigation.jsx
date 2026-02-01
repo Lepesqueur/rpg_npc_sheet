@@ -2,7 +2,6 @@ import React from 'react';
 
 const Navigation = ({ activeTab, onTabChange }) => {
     const tabs = [
-        { id: 'attributes', label: 'ATRIBUTOS & PERÍCIAS' },
         { id: 'combat', label: 'COMBATE & DEFESA' },
         { id: 'skills', label: 'HABILIDADES & TALENTOS' },
     ];

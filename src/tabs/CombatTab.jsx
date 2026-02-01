@@ -300,7 +300,6 @@ const CombatTab = () => {
         if (isEditMode) {
             openEditModal(attack);
         } else {
-            const allSkills = Object.values(characterData.skillCategories).flatMap(cat => cat.skills);
             const skill = allSkills.find(s => s.name === attack.skill);
             if (skill) {
                 setRollingSkill(skill);
@@ -1238,7 +1237,6 @@ const CombatTab = () => {
                         </button>
                     </ModalFooter>
                 </Modal>
-
 
                 <SkillRollModal
                     isOpen={!!rollingSkill}
