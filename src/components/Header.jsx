@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useCharacter } from '../context/CharacterContext';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from './Modal';
 import { useToast } from './Toast';
 
 const Header = () => {
-    const { isEditMode, toggleEditMode, characterData, updateName, updateLevel, updateXp, updateNextLevel, updateSpeed, updatePerception, updateStatus } = useCharacter();
+    const { isEditMode, toggleEditMode, characterData, updateName, updateLevel, updateSpeed, updatePerception, updateStatus, exportCharacter, importCharacter } = useCharacter();
 
     const { showToast } = useToast();
     const [restModal, setRestModal] = useState({ isOpen: false, type: null });
     const [comfortLevel, setComfortLevel] = useState(0);
+    const fileInputRef = useRef(null);
 
     const openRestModal = (type) => {
         setRestModal({ isOpen: true, type });
@@ -38,156 +39,157 @@ const Header = () => {
         setRestModal({ isOpen: false, type: null });
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const success = importCharacter(event.target.result);
+            if (success) {
+                showToast('Ficha de personagem carregada com sucesso!', 'success');
+            } else {
+                showToast('Erro ao carregar ficha. Arquivo inválido.', 'error');
+            }
+            // Reset input so same file can be selected again if needed
+            e.target.value = '';
+        };
+        reader.readAsText(file);
+    };
+
     return (
-        <header className="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden mb-6">
+        <header className="glass-card rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mb-6">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow opacity-50"></div>
 
-            {/* Edit Mode Toggle */}
-            <div className="absolute top-4 right-6 z-20 flex gap-2">
-                {/* Rest Buttons */}
-                <button
-                    onClick={() => openRestModal('short')}
-                    className="flex items-center justify-center w-8 h-8 rounded-lg bg-black/40 border border-white/10 text-cyber-gray hover:text-white hover:border-white/30 transition-all group"
-                    title="Descanso Curto"
-                >
-                    <i className="fa-solid fa-campground text-xs group-hover:scale-110 transition-transform"></i>
-                </button>
-                <button
-                    onClick={() => openRestModal('long')}
-                    className="flex items-center justify-center w-8 h-8 rounded-lg bg-black/40 border border-white/10 text-cyber-gray hover:text-white hover:border-white/30 transition-all group"
-                    title="Descanso Longo"
-                >
-                    <i className="fa-solid fa-bed text-xs group-hover:scale-110 transition-transform"></i>
-                </button>
-
-                <button
-                    onClick={toggleEditMode}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-300 group ${isEditMode
-                        ? 'bg-cyber-yellow/20 border-cyber-yellow text-cyber-yellow shadow-[0_0_15px_rgba(255,215,0,0.3)]'
-                        : 'bg-white/5 border-white/10 text-cyber-gray hover:border-white/30 hover:text-white'
-                        }`}
-                >
-                    <i className={`fa-solid ${isEditMode ? 'fa-unlock-keyhole' : 'fa-lock'} text-xs`}></i>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
-                        {isEditMode ? 'Modo Edição' : 'Modo Leitura'}
-                    </span>
-                    <div className={`w-2 h-2 rounded-full ${isEditMode ? 'bg-cyber-yellow animate-pulse' : 'bg-gray-600'}`}></div>
-                </button>
-            </div>
-
-            <div className="relative shrink-0 group">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
-                <img
-                    alt="Aeliana Portrait"
-                    className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-cyber-pink shadow-neon-pink object-cover z-10"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI"
-                />
-            </div>
-            <div className="flex-grow w-full md:w-auto text-center md:text-left flex flex-col justify-center h-32 md:h-40">
-                {isEditMode ? (
-                    <input
-                        type="text"
-                        value={characterData.name}
-                        onChange={(e) => updateName(e.target.value)}
-                        className="text-4xl md:text-5xl font-bold tracking-wide text-white mb-1 uppercase text-glow-pink font-display bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-full text-center md:text-left"
-                        placeholder="Nome do Personagem"
+            {/* Left Section: Portrait & Info */}
+            <div className="flex items-center gap-4 w-full md:w-auto">
+                <div className="relative shrink-0 group">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+                    <img
+                        alt="Portrait"
+                        className="relative w-16 h-16 rounded-full border-2 border-cyber-pink shadow-neon-pink object-cover z-10"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI"
                     />
-                ) : (
-                    <h1 className="text-4xl md:text-5xl font-bold tracking-wide text-white mb-1 uppercase text-glow-pink font-display">{characterData.name}</h1>
-                )}
-
-                <div className="text-cyber-gray text-lg font-medium tracking-widest uppercase mb-4 flex items-center justify-center md:justify-start gap-2">
-                    Nível
-                    {isEditMode ? (
-                        <input
-                            type="number"
-                            value={characterData.level}
-                            onChange={(e) => updateLevel(e.target.value)}
-                            className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-16 text-center text-white"
-                            min="1"
-                        />
-                    ) : (
-                        <span className="text-white">{characterData.level}</span>
-                    )}
                 </div>
-                <div className="w-full max-w-md mx-auto md:mx-0">
-                    <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
-                        <div
-                            className="h-full bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow shadow-[0_0_10px_#ff007f] transition-all duration-500"
-                            style={{ width: `${Math.min(100, Math.max(0, (characterData.xp / characterData.nextLevel) * 100))}%` }}
-                        ></div>
-                    </div>
-                    <div className="flex justify-between text-xs text-cyber-gray mt-1 font-mono">
-                        {isEditMode ? (
-                            <>
-                                <div className="flex items-center gap-1">
-                                    XP:
-                                    <input
-                                        type="number"
-                                        value={characterData.xp}
-                                        onChange={(e) => updateXp(e.target.value)}
-                                        className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-16 text-xs text-cyber-gray"
-                                    />
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    Próximo Nível:
-                                    <input
-                                        type="number"
-                                        value={characterData.nextLevel}
-                                        onChange={(e) => updateNextLevel(e.target.value)}
-                                        className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-16 text-xs text-cyber-gray text-right"
-                                    />
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <span>XP: {characterData.xp}</span>
-                                <span>Próximo Nível: {characterData.nextLevel}</span>
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
 
-            {/* Speed and Perception - New Column */}
-            <div className="w-full md:w-auto flex flex-row items-center justify-center gap-4 shrink-0 md:absolute md:bottom-6 md:right-6">
-                <div className="glass-panel p-2 rounded-lg border border-white/10 bg-black/40 flex items-center gap-3 min-w-[140px]">
-                    <div className="w-8 h-8 rounded bg-cyber-pink/20 flex items-center justify-center text-cyber-pink shrink-0">
-                        <i className="fa-solid fa-person-running"></i>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-[10px] uppercase tracking-wider text-cyber-gray leading-none mb-1">Velocidade</span>
+                <div className="flex flex-col flex-grow">
+                    <div className="flex items-center gap-2">
                         {isEditMode ? (
                             <input
-                                type="number"
-                                value={characterData.speed}
-                                onChange={(e) => updateSpeed(e.target.value)}
-                                className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-16 text-sm font-bold text-white leading-none"
+                                type="text"
+                                value={characterData.name}
+                                onChange={(e) => updateName(e.target.value)}
+                                className="text-xl font-bold tracking-wide text-white uppercase font-display bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-full"
+                                placeholder="Nome do Personagem"
                             />
                         ) : (
-                            <span className="text-sm font-bold text-white leading-none">{characterData.speed}</span>
+                            <h1 className="text-xl font-bold tracking-wide text-white uppercase font-display">{characterData.name}</h1>
+                        )}
+                        <div className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded border border-white/10 shrink-0">
+                            <span className="text-[10px] text-cyber-gray font-bold uppercase">Nível</span>
+                            {isEditMode ? (
+                                <input
+                                    type="number"
+                                    value={characterData.level}
+                                    onChange={(e) => updateLevel(e.target.value)}
+                                    className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-8 text-center text-white text-sm font-bold"
+                                    min="1"
+                                />
+                            ) : (
+                                <span className="text-white text-sm font-bold">{characterData.level}</span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Middle Section: Stats (Speed/Perception) */}
+            <div className="flex items-center gap-4 shrink-0 md:ml-auto">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/40 border border-white/10">
+                    <i className="fa-solid fa-person-running text-cyber-pink text-xs"></i>
+                    <div className="flex flex-col leading-none">
+                        <span className="text-[8px] uppercase tracking-wider text-cyber-gray">Velocidade</span>
+                        {isEditMode ? (
+                            <input
+                                type="text"
+                                value={characterData.speed}
+                                onChange={(e) => updateSpeed(e.target.value)}
+                                className="bg-transparent border-none outline-none w-10 text-white font-bold text-xs p-0 m-0 h-auto"
+                            />
+                        ) : (
+                            <span className="text-white font-bold text-xs">{characterData.speed}</span>
                         )}
                     </div>
                 </div>
-
-                <div className="glass-panel p-2 rounded-lg border border-white/10 bg-black/40 flex items-center gap-3 min-w-[140px]">
-                    <div className="w-8 h-8 rounded bg-cyber-purple/20 flex items-center justify-center text-cyber-purple shrink-0">
-                        <i className="fa-solid fa-eye"></i>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-[10px] uppercase tracking-wider text-cyber-gray leading-none mb-1">Percepção</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/40 border border-white/10">
+                    <i className="fa-solid fa-eye text-cyber-purple text-xs"></i>
+                    <div className="flex flex-col leading-none">
+                        <span className="text-[8px] uppercase tracking-wider text-cyber-gray">Percepção</span>
                         {isEditMode ? (
                             <input
                                 type="number"
                                 value={characterData.perception}
                                 onChange={(e) => updatePerception(e.target.value)}
-                                className="bg-transparent border-b border-white/20 focus:border-cyber-purple outline-none w-16 text-sm font-bold text-white leading-none"
+                                className="bg-transparent border-none outline-none w-8 text-white font-bold text-xs p-0 m-0 h-auto"
                             />
                         ) : (
-                            <span className="text-sm font-bold text-white leading-none">{characterData.perception}</span>
+                            <span className="text-white font-bold text-xs">{characterData.perception}</span>
                         )}
                     </div>
                 </div>
+            </div>
+
+            {/* Right Section: Actions */}
+            <div className="flex items-center gap-2 shrink-0 md:ml-4 border-l border-white/10 pl-4">
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept=".json"
+                    className="hidden"
+                />
+                <button
+                    onClick={() => fileInputRef.current.click()}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-800 border border-white/10 hover:border-cyber-blue/50 hover:bg-zinc-700 transition-all text-gray-400 hover:text-cyber-blue"
+                    title="Carregar"
+                >
+                    <i className="fa-solid fa-upload text-xs"></i>
+                </button>
+                <button
+                    onClick={exportCharacter}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-800 border border-white/10 hover:border-cyber-green/50 hover:bg-zinc-700 transition-all text-gray-400 hover:text-cyber-green"
+                    title="Salvar"
+                >
+                    <i className="fa-solid fa-download text-xs"></i>
+                </button>
+
+                <div className="h-6 w-px bg-white/10 mx-1"></div>
+
+                <button
+                    onClick={() => openRestModal('short')}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-black/40 border border-white/10 text-cyber-gray hover:text-white hover:border-white/30 transition-all"
+                    title="Descanso Curto"
+                >
+                    <i className="fa-solid fa-campground text-xs"></i>
+                </button>
+                <button
+                    onClick={() => openRestModal('long')}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-black/40 border border-white/10 text-cyber-gray hover:text-white hover:border-white/30 transition-all"
+                    title="Descanso Longo"
+                >
+                    <i className="fa-solid fa-bed text-xs"></i>
+                </button>
+
+                <button
+                    onClick={toggleEditMode}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-all duration-300 ${isEditMode
+                        ? 'bg-cyber-yellow/20 border-cyber-yellow text-cyber-yellow shadow-[0_0_15px_rgba(255,215,0,0.3)]'
+                        : 'bg-white/5 border-white/10 text-cyber-gray hover:border-white/30 hover:text-white'
+                        }`}
+                    title={isEditMode ? 'Modo Edição (Ativado)' : 'Modo Leitura'}
+                >
+                    <i className={`fa-solid ${isEditMode ? 'fa-unlock-keyhole' : 'fa-lock'} text-xs`}></i>
+                </button>
             </div>
 
             {/* Rest Modal */}
