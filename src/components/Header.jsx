@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from './Toast';
 import CharacterManager from './CharacterManager';
+import CompendiumModal from './CompendiumModal';
 
 const Header = () => {
     const { isEditMode, toggleEditMode, characterData, updateName, updateSpeed, updatePerception, updateStatus, exportCharacter, importCharacter } = useCharacter();
@@ -9,6 +10,7 @@ const Header = () => {
     const { showToast } = useToast();
     const fileInputRef = useRef(null);
     const [isManagerOpen, setIsManagerOpen] = useState(false);
+    const [isCompendiumOpen, setIsCompendiumOpen] = useState(false);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -99,6 +101,17 @@ const Header = () => {
                 <div className="h-6 w-px bg-white/10 mx-1"></div>
 
                 <button
+                    onClick={() => setIsCompendiumOpen(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cyber-blue/10 border border-cyber-blue/40 text-cyber-blue hover:bg-cyber-blue/20 hover:shadow-[0_0_15px_rgba(0,186,255,0.15)] transition-all font-bold text-[10px] uppercase tracking-wider"
+                    title="Compêndio de Recursos"
+                >
+                    <i className="fa-solid fa-book-atlas"></i>
+                    <span className="hidden sm:inline">Compêndio</span>
+                </button>
+
+                <div className="h-6 w-px bg-white/10 mx-1"></div>
+
+                <button
                     onClick={toggleEditMode}
                     className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-all duration-300 ${isEditMode
                         ? 'bg-cyber-yellow/20 border-cyber-yellow text-cyber-yellow shadow-[0_0_15px_rgba(255,215,0,0.3)]'
@@ -111,6 +124,7 @@ const Header = () => {
             </div>
 
             <CharacterManager isOpen={isManagerOpen} onClose={() => setIsManagerOpen(false)} />
+            <CompendiumModal isOpen={isCompendiumOpen} onClose={() => setIsCompendiumOpen(false)} />
         </header>
     );
 };

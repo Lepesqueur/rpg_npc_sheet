@@ -627,11 +627,11 @@ const CombatTab = () => {
                                 </div>
                             ) : (
                                 (characterData.talents || []).map((item) => {
-                                    const isAction = item.category === 'Ação Básica';
-                                    const mainColor = isAction ? 'cyber-pink' : 'cyber-yellow';
-                                    const mainColorText = isAction ? 'text-cyber-pink' : 'text-cyber-yellow';
-                                    const mainColorBg = isAction ? 'bg-cyber-pink/10' : 'bg-cyber-yellow/10';
-                                    const mainColorBorder = isAction ? 'border-cyber-pink/30' : 'border-cyber-yellow/30';
+                                    const categoryColor = getGroupColor(item);
+                                    const mainColor = categoryColor;
+                                    const mainColorText = `text-${categoryColor}`;
+                                    const mainColorBg = `bg-${categoryColor}/10`;
+                                    const mainColorBorder = `border-${categoryColor}/30`;
 
                                     return (
                                         <div
@@ -642,8 +642,8 @@ const CombatTab = () => {
                                             <div className={`absolute top-0 left-0 w-1 h-full bg-${mainColor} opacity-50`}></div>
 
                                             <div className="flex items-center gap-3">
-                                                <div className={`shrink-0 w-8 h-8 flex items-center justify-center rounded bg-black/40 border ${mainColorBorder} text-${mainColor} group-hover:shadow-[0_0_8px_currentColor] transition-all`}>
-                                                    <i className={`fa-solid ${item.icon || (isAction ? 'fa-burst' : 'fa-star')} text-sm`}></i>
+                                                <div className={`shrink-0 w-8 h-8 flex items-center justify-center rounded bg-black/40 border ${mainColorBorder} ${mainColorText} group-hover:shadow-[0_0_8px_currentColor] transition-all`}>
+                                                    <i className={`fa-solid ${item.icon || (item.category === 'Ação Básica' ? 'fa-burst' : 'fa-star')} text-sm`}></i>
                                                 </div>
 
                                                 <div className="flex-grow min-w-0">
