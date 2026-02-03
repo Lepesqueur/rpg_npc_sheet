@@ -156,3 +156,26 @@ export const CONDITIONS = {
         ]
     }
 };
+
+// "Ação Básica" é obrigatória para a separação da UI (coluna esquerda vs direita)
+export const TALENT_GROUPS = [
+    "Ação Básica", "OFUSCAR", "RESPLANDECER", "ARTES MARCIAIS", "COMBATE ARMADO",
+    "ELETRICIDADE", "ELOQUÊNCIA", "ESPREITAR", "NATUREZA",
+    "PIROMANCIA", "PRESERVAR", "TELECINESE", "TELEPATIA"
+];
+
+export const TALENT_GROUP_COLORS = {
+    "Ação Básica": "cyber-pink",
+    "OFUSCAR": "cyber-purple",
+    "RESPLANDECER": "cyber-yellow",
+    "ARTES MARCIAIS": "cyber-cyan",
+    "COMBATE ARMADO": "cyber-pink",
+    "ELETRICIDADE": "cyber-purple",
+    "ELOQUÊNCIA": "cyber-yellow",
+    "ESPREITAR": "cyber-cyan",
+    "NATUREZA": "cyber-green",
+    "PIROMANCIA": "cyber-pink",
+    "PRESERVAR": "cyber-purple",
+    "TELECINESE": "cyber-yellow",
+    "TELEPATIA": "cyber-cyan"
+};

@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '.
 import SkillRollModal from '../components/SkillRollModal';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
-import { DAMAGE_RESISTANCES, CONDITIONS } from '../data/rules';
+import { DAMAGE_RESISTANCES, CONDITIONS, TALENT_GROUP_COLORS, TALENT_GROUPS } from '../data/rules';
 import IconPicker from '../components/IconPicker';
 
 const ARMOR_TYPES = {
@@ -11,6 +11,13 @@ const ARMOR_TYPES = {
     escudo: { label: 'Escudo', icon: 'fa-shield-halved' },
     elmo: { label: 'Elmo', icon: 'fa-helmet-safety' },
     outros: { label: 'Outros', icon: 'fa-box-open' }
+};
+
+const getGroupColor = (item) => {
+    if (item.category && TALENT_GROUP_COLORS[item.category]) {
+        return TALENT_GROUP_COLORS[item.category];
+    }
+    return 'cyber-pink';
 };
 
 // Componente simples de progresso circular usando SVG
@@ -605,7 +612,7 @@ const CombatTab = () => {
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase">Habilidades & Talentos</h3>
                             {isEditMode && (
                                 <button
-                                    onClick={() => setEditingTalent({ category: 'actions', tags: ['Habilidade Ativa'], stats: {}, potencializacoes: [] })}
+                                    onClick={() => setEditingTalent({ category: 'Ação Básica', tags: ['Habilidade Ativa'], stats: {}, potencializacoes: [] })}
                                     className="w-6 h-6 rounded bg-cyber-pink/20 border border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/30 hover:shadow-neon-pink transition-all flex items-center justify-center"
                                 >
                                     <i className="fa-solid fa-plus text-[10px]"></i>
@@ -620,7 +627,7 @@ const CombatTab = () => {
                                 </div>
                             ) : (
                                 (characterData.talents || []).map((item) => {
-                                    const isAction = item.category === 'actions';
+                                    const isAction = item.category === 'Ação Básica';
                                     const mainColor = isAction ? 'cyber-pink' : 'cyber-yellow';
                                     const mainColorText = isAction ? 'text-cyber-pink' : 'text-cyber-yellow';
                                     const mainColorBg = isAction ? 'bg-cyber-pink/10' : 'bg-cyber-yellow/10';
@@ -642,9 +649,11 @@ const CombatTab = () => {
                                                 <div className="flex-grow min-w-0">
                                                     <div className="flex items-center gap-2 mb-0.5">
                                                         <h4 className="text-[11px] font-bold text-white uppercase tracking-wider truncate">{item.name}</h4>
-                                                        <span className="text-[8px] px-1 py-0 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
-                                                            {item.stats?.ativacao || (isAction ? 'Ação' : 'Passiva')}
-                                                        </span>
+                                                        {item.category && item.category !== 'Ação Básica' && (
+                                                            <span className={`text-[9px] px-1.5 py-0.5 rounded bg-${getGroupColor(item)}/20 border border-${getGroupColor(item)}/40 text-${getGroupColor(item)} font-bold uppercase tracking-tighter`}>
+                                                                {item.category}
+                                                            </span>
+                                                        )}
                                                     </div>
                                                     <p className="text-[9px] text-gray-500 truncate leading-none italic">{item.description}</p>
                                                 </div>
@@ -1722,11 +1731,12 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
                                 <select
                                     className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-4 py-2 focus:border-cyber-pink focus:outline-none"
                                     name="category"
-                                    value={formData?.category || 'actions'}
+                                    value={formData?.category || 'Ação Básica'}
                                     onChange={handleChange}
                                 >
-                                    <option value="actions">Ação</option>
-                                    <option value="talent">Talento</option>
+                                    {TALENT_GROUPS.map(group => (
+                                        <option key={group} value={group}>{group}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div>
