@@ -5,7 +5,7 @@ import CharacterManager from './CharacterManager';
 import CompendiumModal from './CompendiumModal';
 
 const Header = () => {
-    const { isEditMode, toggleEditMode, characterData, updateName, updateSpeed, updatePerception, updateStatus, exportCharacter, importCharacter } = useCharacter();
+    const { isEditMode, toggleEditMode, characterData, updateName, updateSpeed, updatePerception, updateStatus, exportCharacter, importCharacter, theme, toggleTheme } = useCharacter();
 
     const { showToast } = useToast();
     const fileInputRef = useRef(null);
@@ -32,12 +32,12 @@ const Header = () => {
 
     return (
         <header className="glass-card rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 relative overflow-hidden mb-6">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow opacity-50"></div>
+            <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow ${theme === 'medieval' ? 'opacity-30' : 'opacity-50'}`}></div>
 
             {/* Left Section: Portrait & Info */}
             <div className="flex items-center gap-4 w-full md:w-auto">
                 <div className="relative shrink-0 group">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur ${theme === 'medieval' ? 'opacity-30' : 'opacity-60'} group-hover:opacity-100 transition duration-500`}></div>
                     <img
                         alt="Portrait"
                         className="relative w-16 h-16 rounded-full border-2 border-cyber-pink shadow-neon-pink object-cover z-10"
@@ -107,6 +107,16 @@ const Header = () => {
                 >
                     <i className="fa-solid fa-book-atlas"></i>
                     <span className="hidden sm:inline">Compêndio</span>
+                </button>
+
+                <div className="h-6 w-px bg-white/10 mx-1"></div>
+
+                <button
+                    onClick={toggleTheme}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:border-white/30 hover:text-white transition-all shadow-sm"
+                    title={theme === 'medieval' ? 'Mudar para Tema Cyberpunk' : 'Mudar para Tema Medieval'}
+                >
+                    <i className={`fa-solid ${theme === 'medieval' ? 'fa-microchip' : 'fa-scroll'} text-xs`}></i>
                 </button>
 
                 <div className="h-6 w-px bg-white/10 mx-1"></div>

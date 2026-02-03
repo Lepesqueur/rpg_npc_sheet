@@ -4,49 +4,90 @@
 
 :root {
   color-scheme: dark;
+  --bg-color: #050505;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0b0b0f 90%);
+  --text-main: #ffffff;
+  --text-muted: #888899;
+  --card-bg: rgba(19, 19, 31, 0.7);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --accent-pink: #ff0099;
+  --accent-purple: #bd00ff;
+  --accent-yellow: #ffd700;
+  --accent-green: #39ff14;
+  --accent-red: #ff3131;
+  --accent-blue: #00bacf;
+  --accent-cyan: #00f3ff;
+}
+
+body.theme-medieval {
+  color-scheme: dark;
+  --bg-color: #0a0a0c;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #1a1a1c 0%, #08080a 100%);
+  --text-main: #e2d9c2;
+  /* Aged parchment text */
+  --text-muted: #8e8271;
+  --card-bg: rgba(26, 26, 28, 0.8);
+  --card-border: rgba(205, 127, 50, 0.2);
+  /* Bronze border hint */
+  --accent-pink: #990000;
+  /* Crimson / Blood */
+  --accent-purple: #4b0082;
+  /* Indigo / Royal */
+  --accent-yellow: #cd7f32;
+  /* Bronze */
+  --accent-green: #1b4d3e;
+  /* Forest / Deep Green */
+  --accent-red: #800000;
+  /* Maroon */
+  --accent-blue: #2c3e50;
+  /* Steel Blue */
+  --accent-cyan: #4682b4;
+  /* Dark Steel */
 }
 
 body {
-  @apply bg-cyber-bg text-white min-h-screen overflow-x-hidden;
-  background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0b0b0f 90%);
+  @apply text-white min-h-screen overflow-x-hidden transition-colors duration-500;
+  background-color: var(--bg-color);
+  background-image: var(--bg-gradient);
+  color: var(--text-main);
 }
 
 .bg-scanline {
   background-size: 100% 3px, 6px 100%;
   background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    linear-gradient(90deg, rgba(Red, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
 }
 
 .glass-card {
-  background: rgba(19, 19, 31, 0.7);
+  background: var(--card-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
 .text-glow-pink {
-  text-shadow: 0 0 8px #ff007f;
+  text-shadow: 0 0 8px var(--accent-pink);
 }
 
 .text-glow-purple {
-  text-shadow: 0 0 8px #7f00ff;
+  text-shadow: 0 0 8px var(--accent-purple);
 }
 
 .text-glow-yellow {
-  text-shadow: 0 0 8px #ffd700;
+  text-shadow: 0 0 8px var(--accent-yellow);
 }
 
 .text-glow-green {
-  text-shadow: 0 0 8px #39ff14;
+  text-shadow: 0 0 8px var(--accent-green);
 }
 
 .text-glow-cyan {
-  text-shadow: 0 0 8px #00f3ff;
+  text-shadow: 0 0 8px var(--accent-cyan);
 }
 
 .text-glow-red {
-  text-shadow: 0 0 8px #ff3131;
+  text-shadow: 0 0 8px var(--accent-red);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -58,7 +99,8 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(224, 38, 255, 0.3);
+  background: var(--accent-pink);
+  opacity: 0.3;
   border-radius: 10px;
 }
 
@@ -102,14 +144,42 @@ body {
 }
 
 /* Condições */
-.condition-pink { @apply text-cyber-pink shadow-[0_0_10px_rgba(255,0,153,0.3)]; }
-.condition-purple { @apply text-cyber-purple shadow-[0_0_10px_rgba(189,0,255,0.3)]; }
-.condition-green { @apply text-cyber-green shadow-[0_0_10px_rgba(57,255,20,0.3)]; }
-
-.level-badge {
-    @apply w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-all border border-white/20 bg-white/5;
+.condition-pink {
+  @apply text-accent-pink;
+  box-shadow: 0 0 10px rgba(255, 0, 153, 0.3);
 }
 
-.level-badge-active-purple { @apply border-cyber-purple/60 bg-cyber-purple/10 text-cyber-purple shadow-[0_0_15px_rgba(189,0,255,0.4)]; }
-.level-badge-active-pink { @apply border-cyber-pink/60 bg-cyber-pink/10 text-cyber-pink shadow-[0_0_15px_rgba(255,0,153,0.4)]; }
-.level-badge-active-green { @apply border-cyber-green/60 bg-cyber-green/10 text-cyber-green shadow-[0_0_15px_rgba(57,255,20,0.4)]; }
+.condition-purple {
+  @apply text-accent-purple;
+  box-shadow: 0 0 10px rgba(189, 0, 255, 0.3);
+}
+
+.condition-green {
+  @apply text-accent-green;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+}
+
+.level-badge {
+  @apply w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-all border border-white/20 bg-white/5;
+}
+
+.level-badge-active-purple {
+  @apply text-accent-purple;
+  border-color: color-mix(in srgb, var(--accent-purple), transparent 40%);
+  background-color: color-mix(in srgb, var(--accent-purple), transparent 90%);
+  box-shadow: 0 0 15px rgba(189, 0, 255, 0.4);
+}
+
+.level-badge-active-pink {
+  @apply text-accent-pink;
+  border-color: color-mix(in srgb, var(--accent-pink), transparent 40%);
+  background-color: color-mix(in srgb, var(--accent-pink), transparent 90%);
+  box-shadow: 0 0 15px rgba(255, 0, 153, 0.4);
+}
+
+.level-badge-active-green {
+  @apply text-accent-green;
+  border-color: color-mix(in srgb, var(--accent-green), transparent 40%);
+  background-color: color-mix(in srgb, var(--accent-green), transparent 90%);
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+}

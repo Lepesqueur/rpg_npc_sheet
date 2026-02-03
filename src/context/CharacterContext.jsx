@@ -13,6 +13,7 @@ export const useCharacter = () => {
 
 export const CharacterProvider = ({ children }) => {
     const [isEditMode, setIsEditMode] = useState(false);
+    const [theme, setTheme] = useState(() => localStorage.getItem('gm_npc_theme') || 'cyberpunk');
 
     // --- Core Data Helpers ---
     const generateDefaultData = (name = "Novo NPC") => {
@@ -157,6 +158,15 @@ export const CharacterProvider = ({ children }) => {
         localStorage.setItem('active_npc_id', activeCharacterId);
     }, [activeCharacterId]);
 
+    useEffect(() => {
+        localStorage.setItem('gm_npc_theme', theme);
+        if (theme === 'medieval') {
+            document.body.classList.add('theme-medieval');
+        } else {
+            document.body.classList.remove('theme-medieval');
+        }
+    }, [theme]);
+
     // Force seed medieval characters if they don't exist in the current library
     useEffect(() => {
         const medievalNames = ["Grommash, o Quebra-Escudos", "Valerius, o Iluminado", "Elowen da Floresta", "Nyx, a Sombra", "Malakor, o Arquimago"];
@@ -247,6 +257,10 @@ export const CharacterProvider = ({ children }) => {
     };
 
     const toggleEditMode = () => setIsEditMode(prev => !prev);
+
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'cyberpunk' ? 'medieval' : 'cyberpunk');
+    };
 
     const updateAttribute = (name, newValue) => {
         setCharacterData(prev => ({
@@ -629,7 +643,9 @@ export const CharacterProvider = ({ children }) => {
         updateSpeed,
         updatePerception,
         exportCharacter,
-        importCharacter
+        importCharacter,
+        theme,
+        toggleTheme
     };
 
     return (

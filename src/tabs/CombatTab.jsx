@@ -65,7 +65,7 @@ const CircularProgress = ({ value, max, color, label, sublabel, statusKey, isEdi
                                 type="number"
                                 value={max}
                                 onChange={(e) => updateStatusMax(statusKey, e.target.value)}
-                                className="w-8 bg-black/40 border-b border-cyber-yellow/50 text-[11px] font-bold text-cyber-yellow text-center outline-none focus:border-cyber-yellow transition-all"
+                                className="w-8 bg-black/40 border-b border-cyber-yellow/50 text-[11px] font-bold text-cyber-yellow text-center outline-none focus:border-accent-yellow transition-all"
                             />
                         ) : (
                             <span className="text-[11px] text-white/40 font-bold">{max}</span>
@@ -881,7 +881,7 @@ const CombatTab = () => {
                             <CircularProgress
                                 value={characterData.vitality.current}
                                 max={characterData.vitality.max}
-                                color="#ff0099"
+                                color="var(--accent-pink)"
                                 label="Vitalidade"
                                 sublabel="Ferida"
                                 statusKey="vitality"
@@ -890,7 +890,7 @@ const CombatTab = () => {
                             <CircularProgress
                                 value={characterData.focus.current}
                                 max={characterData.focus.max}
-                                color="#bd00ff"
+                                color="var(--accent-purple)"
                                 label="Foco"
                                 sublabel="Fadiga"
                                 statusKey="focus"
@@ -899,7 +899,7 @@ const CombatTab = () => {
                             <CircularProgress
                                 value={characterData.will.current}
                                 max={characterData.will.max}
-                                color="#ffd700"
+                                color="var(--accent-yellow)"
                                 label="Vontade"
                                 sublabel="Trauma"
                                 statusKey="will"
